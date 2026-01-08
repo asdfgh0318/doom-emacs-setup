@@ -1,0 +1,222 @@
+#+TITLE: Doom Emacs Installation Manual
+#+AUTHOR: Auto-generated
+#+DATE: 2026-01-02
+#+OPTIONS: toc:2 num:t
+
+* Overview
+
+This manual documents the installation process for Doom Emacs on Debian/Ubuntu-based systems.
+
+Doom Emacs is a configuration framework for GNU Emacs that provides:
+- Fast startup times
+- Modern UI with sensible defaults
+- Vim-style keybindings (Evil mode)
+- Modular configuration system
+- Extensive language support
+
+* Prerequisites
+
+** Required Dependencies
+
+| Package  | Minimum Version | Purpose                          |
+|----------+-----------------+----------------------------------|
+| Emacs    | 27.1+           | The editor itself                |
+| Git      | 2.23+           | Version control, package fetching|
+| ripgrep  | 11.0+           | Fast text search                 |
+| fd       | 7.3.0+          | Fast file finder                 |
+
+** Recommended Dependencies
+
+| Package      | Purpose                                    |
+|--------------+--------------------------------------------|
+| aspell       | Spell checking                             |
+| sqlite3      | Org-roam, forge, and other packages        |
+| pandoc       | Document conversion for org-mode           |
+| shellcheck   | Shell script linting                       |
+| graphviz     | Graph/diagram generation                   |
+| gnuplot      | Plotting for org-mode                      |
+| imagemagick  | Image manipulation                         |
+| libvterm     | Terminal emulator (vterm package)          |
+| cmake        | Native compilation of elisp                |
+
+* Installation Scripts
+
+** install-doom-deps.sh
+
+Installs all system dependencies required for Doom Emacs.
+
+*** Usage
+
+#+begin_src bash
+chmod +x install-doom-deps.sh
+./install-doom-deps.sh
+#+end_src
+
+*** What it installs
+
+1. *Core dependencies*: emacs, git, ripgrep, fd-find
+2. *Build tools*: build-essential, cmake, libtool
+3. *Optional tools*: aspell, sqlite3, pandoc, shellcheck, graphviz, gnuplot
+4. *Fonts*: Fira Code, Hack, DejaVu, JetBrains Mono (if available)
+
+** install-doom-emacs.sh
+
+Installs Doom Emacs itself after dependencies are in place.
+
+*** Usage
+
+#+begin_src bash
+chmod +x install-doom-emacs.sh
+./install-doom-emacs.sh
+#+end_src
+
+*** What it does
+
+1. Backs up existing Emacs configuration
+2. Clones Doom Emacs to =~/.config/emacs=
+3. Adds Doom binaries to PATH
+4. Runs =doom install=
+
+* Manual Installation
+
+If you prefer to install manually:
+
+** Step 1: Install dependencies
+
+#+begin_src bash
+sudo apt update
+sudo apt install emacs git ripgrep fd-find
+#+end_src
+
+** Step 2: Clone Doom Emacs
+
+#+begin_src bash
+git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
+#+end_src
+
+** Step 3: Add to PATH
+
+Add to your =~/.bashrc= or =~/.zshrc=:
+
+#+begin_src bash
+export PATH="$HOME/.config/emacs/bin:$PATH"
+#+end_src
+
+** Step 4: Run installer
+
+#+begin_src bash
+~/.config/emacs/bin/doom install
+#+end_src
+
+* Post-Installation
+
+** Essential Doom Commands
+
+| Command       | Description                              |
+|---------------+------------------------------------------|
+| =doom sync=   | Synchronize packages after config change |
+| =doom upgrade=| Update Doom and packages                 |
+| =doom doctor= | Diagnose common issues                   |
+| =doom env=    | Regenerate environment variables         |
+| =doom build=  | Recompile packages                       |
+
+** Configuration Files
+
+All configuration lives in =~/.config/doom/= (or =~/.doom.d/=):
+
+| File        | Purpose                                    |
+|-------------+--------------------------------------------|
+| =init.el=   | Enable/disable Doom modules                |
+| =config.el= | Personal configuration                     |
+| =packages.el= | Additional packages to install           |
+
+** First Steps After Installation
+
+1. Run =doom doctor= to check for issues:
+   #+begin_src bash
+   doom doctor
+   #+end_src
+
+2. Explore the module system in =~/.config/doom/init.el=
+
+3. Start Emacs:
+   #+begin_src bash
+   emacs
+   #+end_src
+
+4. Press =SPC h d h= (or =M-x doom/help=) for Doom's help system
+
+* Troubleshooting
+
+** Common Issues
+
+*** Emacs version too old
+
+#+begin_src bash
+# Check version
+emacs --version
+
+# On Ubuntu, you may need a PPA for newer Emacs:
+sudo add-apt-repository ppa:kelleyk/emacs
+sudo apt update
+sudo apt install emacs28
+#+end_src
+
+*** fd not found
+
+On Debian/Ubuntu, fd is installed as =fdfind=. Doom detects this automatically,
+but you can create a symlink:
+
+#+begin_src bash
+mkdir -p ~/.local/bin
+ln -s $(which fdfind) ~/.local/bin/fd
+#+end_src
+
+*** Native compilation errors
+
+Ensure you have build tools:
+
+#+begin_src bash
+sudo apt install build-essential libgccjit-12-dev
+#+end_src
+
+*** Fonts not displaying correctly
+
+Install all-the-icons fonts from within Emacs:
+
+#+begin_src
+M-x all-the-icons-install-fonts
+#+end_src
+
+** Getting Help
+
+- Doom Emacs Discord: https://discord.gg/qvGgnVx
+- GitHub Issues: https://github.com/doomemacs/doomemacs/issues
+- Documentation: https://github.com/doomemacs/doomemacs/blob/master/docs/index.org
+
+* Quick Reference
+
+** Essential Keybindings (Vim/Evil mode)
+
+| Key         | Action                    |
+|-------------+---------------------------|
+| =SPC=       | Leader key (main menu)    |
+| =SPC .=     | Find file                 |
+| =SPC ,=     | Switch buffer             |
+| =SPC SPC=   | Execute command (M-x)     |
+| =SPC f f=   | Find file                 |
+| =SPC f r=   | Recent files              |
+| =SPC b b=   | List buffers              |
+| =SPC p p=   | Switch project            |
+| =SPC /=     | Search in project         |
+| =SPC h=     | Help prefix               |
+| =SPC q q=   | Quit Emacs                |
+
+** File Locations
+
+| Path                    | Description              |
+|-------------------------+--------------------------|
+| =~/.config/emacs/=      | Doom Emacs installation  |
+| =~/.config/doom/=       | Your configuration       |
+| =~/.emacs.d/=           | Alternative install path |
+| =~/.doom.d/=            | Alternative config path  |
